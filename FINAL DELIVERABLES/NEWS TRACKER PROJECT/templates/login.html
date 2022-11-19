@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        function validateLogin(){
+            var username = document.getElementById("username").value
+            var password = document.getElementById("password").value
+            var id = -1
+            {% for i in cred %}
+            var uname = '{{i['USERNAME']}}'
+            var pword = '{{i['PASSWORD']}}'
+            console.log(uname == username)
+            console.log(pword == password)
+                if(username === uname && password === pword){
+                    id = '{{i['ID']}}'
+                    console.warn(id);
+                }
+            {% endfor %}
+            if(id === -1){
+                document.getElementById("warning").innerHTML = "Login Credentials Incorrect"
+            }else{
+                document.getElementById("status").value = id
+                document.getElementById("login-form").submit()
+            }
+        }
+    </script>
+    <style>
+        .cont{
+            width:100%;
+            height:100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top:20%;
+        }
+        
+        #login-form{
+           
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+          }
+          
+          li {
+            float: right;
+          }
+          
+          li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+          }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+        <li><a href="{{ url_for('home') }}">Preferences</a></li>
+        <li><a href="{{ url_for('search') }}">Search</a></li>
+      </ul>
+    <div id="cont">
+    <form method = 'post' id = 'login-form'>
+        <label>Email</label><br>
+        <input type = "email" name = "username" id="username"/><br>
+        <label>Password</label><br>
+        <input type = "password" name = "password" id="password"/><br><br>
+        <input type = "number" name="status" id="status" hidden/>
+        <input type="button" value="Login" onclick="validateLogin()"/>
+        <p id="warning"></p>
+    </form>
+</div>
+</body>
+</html>

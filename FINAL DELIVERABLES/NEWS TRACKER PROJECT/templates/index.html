@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        function handleChange(changedInput){
+            var changedLabel;
+            var labels = document.getElementsByTagName("label")
+            for(let i=0;i<labels.length;i++){
+                if(labels[i].htmlFor === changedInput.id){
+                    changedLabel = labels[i];
+                }
+            }
+            changedLabel.className = changedInput.checked?"selected":"notselected";
+            changedInput.parentNode.parentNode.className = changedInput.checked?"selected-div":"notselected-div";
+            console.log(changedInput.checked);
+        }
+
+        function handleEmail(){
+            if(document.getElementById("email_pref").value == "true"){
+                document.getElementById("email_pref").value = "false";
+            }else{
+                document.getElementById("email_pref").value = "true";
+            }
+        }
+        function handleSubmit(){
+            var inputs = document.getElementsByTagName("input")
+            var count = 0;
+            for(let i=0;i<inputs.length;i++){
+                if(inputs[i].type == "checkbox" && inputs[i].checked === true){
+                    count +=1;
+                }
+            }
+            if(count>0){
+                document.getElementById("category-selection-form").submit()
+            }else{
+                alert("Please select atleast one category")
+            }
+        }
+         function handleLogOut(){
+            document.getElementById("logout-form").submit()
+        }
+    </script>
+
+    <style type="text/css">
+        .cat-container{
+            width:100px;
+            text-align: center;
+        }
+        .selected{
+            color: rgb(17, 161, 29);
+        }
+        .notselected{
+            color:rgb(221, 93, 93);
+        }
+        .selected-div{
+            width: auto;
+            display:inline-block;
+            background-color: rgb(218, 255, 213);
+            border-color:  rgb(17, 161, 29);
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 10px;
+        }
+        .notselected-div{
+            display:inline-block;
+            width: auto;
+            border-style: solid;
+            border-width: 2px;
+            background-color:rgb(255, 227, 227);
+            border-color: rgb(199, 62, 62);
+            border-radius: 10px;
+        }
+        .success-btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 5px 8px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+          }
+          .failure-btn {
+            background-color: rgb(199, 62, 62); /* Green */
+            border: none;
+            color: white;
+            padding: 5px 8px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+          }
+          ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+          }
+          
+          li {
+            float: right;
+          }
+          
+          li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+          }
+    </style>
+</head>
+<body>
+    <ul>
+        {% if userID != None %}
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        {% endif %}
+        {% if userID == None %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('home') }}">Preferences</a></li>
+        <li><a href="{{ url_for('search') }}">Search</a></li>
+      </ul>
+    <div style="display:flex;justify-content:center;align-items:center;">
+    <div style="height:300px;width:300px;">
+    <form method='post' id = "category-selection-form">
+    {%for i in total%}
+        <div class = {{"selected-div" if i in user else "notselected-div" }}>
+            <div class="cat-container">
+                <input type="checkbox" id = {{i}} value={{i}} name = {{i}} onclick="handleChange(this)" hidden {{"checked" if i in user else "unchecked"}}>
+                <label for={{i}} class={{"selected" if i in user else "notselected" }}>{{i}}</label>
+            </div>
+        </div>
+    {% endfor %}
+    <br>
+    <br>    
+    <label>Do you wish to recieve news update?</label>
+    <input type="text" name="email_pref" value='{{email_pref}}' onclick="handleEmail()" id="email_pref" readonly style="width:30px;"/>
+    <br>
+    <br>
+    <a href="{{ url_for('home') }}"><input type="button" value="cancel" class = "failure-btn"/></a>
+
+    <input type="button" onclick="handleSubmit()" value="Change" class="success-btn"/>
+    </form>
+</div>
+</div>
+</body>
+</html>

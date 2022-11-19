@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+    </script>
+    <style type="text/css">
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+          }
+          
+          li {
+            float: right;
+          }
+          
+          li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+          }
+    </style>
+</head>
+<body>
+    <ul>
+        {% if userID != None %}
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        {% endif %}
+        {% if userID == None %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('home') }}">Preferences</a></li>
+        <li><a href="{{ url_for('search') }}">Search</a></li>
+      </ul>
+    <form method="post" action="{{url_for('search')}}" target="_top">
+        <input type="text" name="query" />
+        <input type="submit"/>
+    </form> 
+    {% if pref_news|length!=0 %}
+    <h3>News to your Taste</h3>
+    <div style="display:flex;flex-wrap:wrap;">
+    {% for i in pref_news%}
+    <div style="width :200px;height :200px;box-shadow:1px 20px 20px black;margin:30px;padding:10px">
+    <p>{{i['TITLE']}}</p>
+    <p><b>Source : </b>{{i['SOURCE']}}</p>
+    <div style="width:35px ;height:20px;background-color:rgb(34, 159, 255);text-align:center;border-radius:10px">
+    <a style="text-decoration:none;color:rgb(255, 255, 255);" href='{{i['LINK']}}'>visit</a>
+    </div>
+    </div>
+    {% endfor %}
+    </div>
+    {% endif %}
+    {% if non_pref_news|length!=0 %}
+    <h3>Suggested News</h3>
+    <div style="display:flex;flex-wrap:wrap;">
+    {% for i in non_pref_news%}
+    <div style="width :200px;height :200px;box-shadow:1px 20px 20px black;margin:30px;padding:10px">
+    <p>{{i['TITLE']}}</p>
+    <p><b>Source : </b>{{i['SOURCE']}}</p>
+    <div style="width:35px ;height:20px;background-color:rgb(34, 159, 255);text-align:center;border-radius:10px">
+    <a style="text-decoration:none;color:rgb(255, 255, 255);" href='{{i['LINK']}}'>visit</a>
+    </div>
+    </div>
+    {% endfor %}
+    </div>
+    {% endif  %}
+</body>
+</html>

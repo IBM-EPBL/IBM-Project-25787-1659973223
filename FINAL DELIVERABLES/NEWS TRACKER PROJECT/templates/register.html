@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+        function validateRegister(){
+            var availabilityFlag = false;
+            {% for i in reg %}
+            if(document.getElementById("username").value === '{{i}}'){
+                availabilityFlag = true;
+            }
+            {% endfor %}
+            if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.getElementById("username").value)){
+                if(!availabilityFlag){
+                if(document.getElementById("name").value != ''){
+                    if(document.getElementById("password").value != ''){
+                        if(document.getElementById("Cpassword").value != ''){
+                            if(document.getElementById("password").value === document.getElementById("Cpassword").value){
+                                if(document.getElementById("password").value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/)){
+                                    document.getElementById("warning").innerHTML = "Criteria Match Successfully";
+                                    document.getElementById("reg-form").submit()
+                                }else{
+                                    document.getElementById("warning").innerHTML = "Password Not Strong  Enough";
+                                }
+                            }else{
+                                document.getElementById("warning").innerHTML = "Password Doesnot Match";
+                            }
+                        }else{
+                            document.getElementById("warning").innerHTML = "Confirm Password field cannot be null";
+                        }
+                    }else{
+                        document.getElementById("warning").innerHTML = "Password field cannot be null";
+                    }
+                }else{
+                    document.getElementById("warning").innerHTML = "Name field cannot be null";
+                }
+            }else{
+                document.getElementById("warning").innerHTML = "An account with this email already exist";
+                }
+            }else{
+                document.getElementById("warning").innerHTML = "InValid";
+            }
+        }
+    </script>
+    <style>
+        .cont{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top:20%;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+          }
+          
+          li {
+            float: right;
+          }
+          
+          li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+          }
+    </style>
+    
+</head>
+<body>
+    <ul>
+        
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('home') }}">Preferences</a></li>
+        <li><a href="{{ url_for('search') }}">Search</a></li>
+      </ul>
+      <div>
+    <a href="{{ url_for('login') }}"><input type="button" onclick="" value="Have an Account Already ?" /></a>
+    <form method = 'post' id = 'reg-form'>
+        <label>Email</label><br>
+        <input type = "email" name = "username" id="username"/><br>
+        <label>Full Name</label><br>
+        <input type = "text" name = "name" id="name"/><br>
+        <label>Password</label><br>
+        <input type = "password" name = "password" id="password"/><br><br>
+        <label>Confirm Password</label><br>
+        <input type = "password" name = "Cpassword" id="Cpassword"/><br><br>
+        <input type="button" value="Register" onclick="validateRegister()"/>
+        <p id="warning"></p>
+    </form>
+</div>
+</body>
+</html>
